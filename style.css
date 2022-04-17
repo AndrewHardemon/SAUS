@@ -1,0 +1,93 @@
+/* :root {
+    --width: 25px;
+    --height: 25px;
+    --x-speed: 5s;
+    --y-speed: 5s;
+    --transition-speed: 2.5s;
+}
+
+body {
+    margin: 0;
+}
+
+.dot {
+    height: var(--height);
+    width: var(--width);
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.x {
+    animation: x var(--x-speed) linear infinite alternate;
+}
+
+.yx {
+    animation: y var(--y-speed) linear infinite alternate;
+}
+
+
+
+
+@keyframes x {
+    100% {
+        transform: translateX(calc(100vw - var(--width)));
+    }
+}
+
+@keyframes y {
+    100% {
+        transform: translateY(calc(100vh - var(--height)));
+    }
+} */
+
+/* canvas {
+    height: 100%;
+    width: 100%;
+} */
+
+:root{
+    --size: 100px;
+    --width: 25px;
+    --height: 25px;
+    --x-speed: 5s;
+    --y-speed: 5s;
+    --transition-speed: 2.5s;
+}
+
+body {
+  margin: 0;
+}
+
+.x {
+  animation: x var(--x-speed) linear infinite alternate;
+}
+
+.y {
+  animation: y var(--y-speed) linear infinite alternate;
+}
+
+.dot {
+    height: var(--height);
+    width: var(--width);
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+@keyframes x {
+  100% {
+    transform: translateX( calc(100vw - var(--width)) );
+  }
+}
+
+@keyframes y {
+  100% {
+    transform: translateY( calc(100vh - var(--height)) );
+  }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
