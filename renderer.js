@@ -15,6 +15,7 @@ const DIRECTION = {
 
 // Editable Global Variables
 const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
+const sounds = [new Audio("./sound-effects/A0.mp3"),new Audio("./sound-effects/Bb0.mp3"),new Audio("./sound-effects/B0.mp3"),new Audio("./sound-effects/C1.mp3"),new Audio("./sound-effects/Db1.mp3"),new Audio("./sound-effects/D1.mp3"),new Audio("./sound-effects/Eb1.mp3"),new Audio("./sound-effects/E1.mp3")]
 
 const Square = {
     new: function (incrementedSpeed){ //possibly add dynamic positions
@@ -33,7 +34,7 @@ const Square = {
 }
 
 const Ball = {
-    new: function (incrementedSpeed){ //possibly add dynamic positions
+    new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
         let radius = 10;
         return {
             radius,
@@ -41,6 +42,8 @@ const Ball = {
             y: (HEIGHT/2) - radius,
             moveX: DIRECTION.IDLE,
             moveY: DIRECTION.IDLE,
+            color,
+            sound,
             speed: incrementedSpeed || SPEED
         }
     }
@@ -121,9 +124,28 @@ const wall_left = Wall.new("left")
 const wall_right = Wall.new("right")
 
 const walls = [wall_up, wall_down, wall_left, wall_right]
+// const balls = []
+// colors.forEach(color => {
+//     const ball = Ball.new()
+//     ball.moveX = Math.ceil(Math.random() * 4)
+//     ball.moveY = Math.ceil(Math.random() * 4)
+//     ball.color = color
+//     // ball.moveX = DIRECTION.RIGHT
+//     // ball.moveY = DIRECTION.DOWN
+//     // context.fillStyle = color
+//     ball.x = Math.ceil(Math.random() * WIDTH)
+//     ball.y = Math.ceil(Math.random() * HEIGHT)
+// })
 const ball1 = Ball.new()
 ball1.moveX = DIRECTION.RIGHT
 ball1.moveY = DIRECTION.DOWN
+ball1.sound = sounds[0]
+
+const ball2 = Ball.new()
+ball2.moveX = DIRECTION.LEFT
+ball2.moveY = DIRECTION.UP
+ball2.sound = sounds[3]
+
 const draw = () => {
     //Clear Canvas
     context.clearRect(0,0,WIDTH,HEIGHT)
@@ -131,32 +153,50 @@ const draw = () => {
     context.fillStyle = "white"
     context.fillRect(0,0,WIDTH,HEIGHT)
     
-    //Create Items
+    //Create Walls
+    walls.forEach(wall => {
+        context.fillStyle = "black"
+        context.fillRect(wall.x, wall.y, wall.width, wall.height)
+        // context.fillStyle = "red"
+    })
     
+    //Create Items
+    // balls.forEach(ball => {
+    //     context.fillStyle = ball.color
+    //     context.beginPath()
+    //     context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true)
+    //     context.stroke();
+    //     context.fill("evenodd")
+    //     balls.push(ball)
+    //     context.fillStyle = ball.color
+    // })
 
     context.fillStyle = "red"
-    // context.fillRect(ball1.x, ball1.y, ball1.width, ball1.height)
     context.beginPath()
     context.arc(ball1.x, ball1.y, ball1.radius, 0, Math.PI * 2, true)
     context.stroke();
     context.fill("evenodd")
 
-    // context.fillRect(100,100,100,100)
+    context.fillStyle = "blue"
+    context.beginPath()
+    context.arc(ball2.x, ball2.y, ball2.radius, 0, Math.PI * 2, true)
+    context.stroke();
+    context.fill("evenodd")
     
-    
-
-    walls.forEach(wall => {
-        context.fillStyle = "red"
-        context.fillRect(wall.x, wall.y, wall.width, wall.height)
-        context.fillStyle = "red"
-    })
 
 
 
-    update(ball1)
+    // update(...balls)
+    update(ball1, ball2)
     console.log("hello")
-    requestAnimationFrame(draw)
+    if(!pause){
+        setTimeout(()=> {
+            requestAnimationFrame(draw)
+        }, 1000/60)
+    }
 }
+
+
 
 const update = (...rest) => {
     rest.forEach(item => {
@@ -170,6 +210,7 @@ const update = (...rest) => {
     
         if(item.x <= WALL_THICKNESS || item.x >= WIDTH - WALL_THICKNESS) {
             item.moveX = item.moveX === DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT
+            item.sound.play()
         }
         
     
@@ -184,6 +225,7 @@ const update = (...rest) => {
     
         if(item.y <= WALL_THICKNESS || item.y >= HEIGHT - WALL_THICKNESS) {
             item.moveY = item.moveY === DIRECTION.UP ? DIRECTION.DOWN : DIRECTION.UP
+            item.sound.play()
         }
     })
     // if(ball1.x <= 0)
@@ -193,10 +235,10 @@ const update = (...rest) => {
 runProgram()
 
 document.addEventListener("keydown", function(key){
-    if(pause){
+    pause = !pause
+    if(!pause){
         runProgram()
     }
-    pause = !pause
 })
 
 // const Program = {
