@@ -3,6 +3,7 @@ const HEIGHT = 600-59
 const SPEED = 3
 const COLOR = '#ffffff'
 const WALL_THICKNESS = 1;
+const AMOUNT = 2 
 
 const DIRECTION = {
     IDLE: 0,
@@ -136,15 +137,24 @@ const walls = [wall_up, wall_down, wall_left, wall_right]
 //     ball.x = Math.ceil(Math.random() * WIDTH)
 //     ball.y = Math.ceil(Math.random() * HEIGHT)
 // })
-const ball1 = Ball.new()
-ball1.moveX = DIRECTION.RIGHT
-ball1.moveY = DIRECTION.DOWN
-ball1.sound = sounds[0]
 
-const ball2 = Ball.new()
-ball2.moveX = DIRECTION.LEFT
-ball2.moveY = DIRECTION.UP
-ball2.sound = sounds[3]
+const balls = []
+for(let i = 0; i < AMOUNT; i++){
+    //Create ball with random values
+    const ball = Ball.new()
+    ball.moveX = Math.ceil(Math.random() * 2) + 2
+    ball.moveY = Math.ceil(Math.random() * 2)
+    
+    ball.sound = sounds[Math.floor(Math.random() * sounds.length)]
+    ball.color = colors[Math.floor(Math.random() * colors.length)]
+    
+    const buffer = WALL_THICKNESS + ball.radius
+
+    ball.x = Math.floor(Math.random() * WIDTH - buffer) + buffer
+    ball.y = Math.floor(Math.random() * HEIGHT - buffer) + buffer
+
+    balls.push(ball)
+}
 
 const draw = () => {
     //Clear Canvas
@@ -159,35 +169,17 @@ const draw = () => {
         context.fillRect(wall.x, wall.y, wall.width, wall.height)
         // context.fillStyle = "red"
     })
-    
-    //Create Items
-    // balls.forEach(ball => {
-    //     context.fillStyle = ball.color
-    //     context.beginPath()
-    //     context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true)
-    //     context.stroke();
-    //     context.fill("evenodd")
-    //     balls.push(ball)
-    //     context.fillStyle = ball.color
-    // })
 
-    context.fillStyle = "red"
-    context.beginPath()
-    context.arc(ball1.x, ball1.y, ball1.radius, 0, Math.PI * 2, true)
-    context.stroke();
-    context.fill("evenodd")
+    //Create Balls
+    balls.forEach((ball) => {
+        context.fillStyle = ball.color
+        context.beginPath()
+        context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true)
+        context.stroke();
+        context.fill("evenodd")
+    })
 
-    context.fillStyle = "blue"
-    context.beginPath()
-    context.arc(ball2.x, ball2.y, ball2.radius, 0, Math.PI * 2, true)
-    context.stroke();
-    context.fill("evenodd")
-    
-
-
-
-    // update(...balls)
-    update(ball1, ball2)
+    update(...balls)
     console.log("hello")
     if(!pause){
         setTimeout(()=> {
@@ -200,6 +192,7 @@ const draw = () => {
 
 const update = (...rest) => {
     rest.forEach(item => {
+        // Change X location
         if(item.moveX === DIRECTION.RIGHT){
             item.x += item.speed 
         } else if(item.moveX === DIRECTION.LEFT){
@@ -208,12 +201,13 @@ const update = (...rest) => {
             console.log("Help", item.moveX)
         }
     
+        // X Axis Bounce
         if(item.x <= WALL_THICKNESS || item.x >= WIDTH - WALL_THICKNESS) {
             item.moveX = item.moveX === DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT
             item.sound.play()
         }
         
-    
+        // Change Y location
         if(item.moveY === DIRECTION.UP){
             item.y += item.speed 
         } else if(item.moveY === DIRECTION.DOWN){
@@ -222,13 +216,12 @@ const update = (...rest) => {
             console.log("Help", item.moveY)
         }
     
-    
+        // Y Axis Bounce
         if(item.y <= WALL_THICKNESS || item.y >= HEIGHT - WALL_THICKNESS) {
             item.moveY = item.moveY === DIRECTION.UP ? DIRECTION.DOWN : DIRECTION.UP
             item.sound.play()
         }
     })
-    // if(ball1.x <= 0)
 }
 
 
