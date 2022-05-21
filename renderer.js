@@ -16,7 +16,9 @@ const DIRECTION = {
 
 // Editable Global Variables
 const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
-const sounds = [new Audio("./sound-effects/A0.mp3"),new Audio("./sound-effects/Bb0.mp3"),new Audio("./sound-effects/B0.mp3"),new Audio("./sound-effects/C1.mp3"),new Audio("./sound-effects/Db1.mp3"),new Audio("./sound-effects/D1.mp3"),new Audio("./sound-effects/Eb1.mp3"),new Audio("./sound-effects/E1.mp3")]
+// const sounds = [new Audio("./sound-effects/a3.mp3"),new Audio("./sound-effects/aS3.mp3"),new Audio("./sound-effects/b3.mp3"),new Audio("./sound-effects/c3.mp3"),new Audio("./sound-effects/cS3.mp3"),new Audio("./sound-effects/d3.mp3"),new Audio("./sound-effects/dS3.mp3"),new Audio("./sound-effects/e3.mp3"),new Audio("./sound-effects/f3.mp3"),new Audio("./sound-effects/fS3.mp3"),new Audio("./sound-effects/g3.mp3"),new Audio("./sound-effects/gS3.mp3"),new Audio("./sound-effects/a4.mp3")]
+// const sounds = [new Audio("./sound-effects/A0.mp3"),new Audio("./sound-effects/Bb0.mp3"),new Audio("./sound-effects/B0.mp3"),new Audio("./sound-effects/C1.mp3"),new Audio("./sound-effects/Db1.mp3"),new Audio("./sound-effects/D1.mp3"),new Audio("./sound-effects/Eb1.mp3"),new Audio("./sound-effects/E1.mp3")]
+const sounds = ["./sound-effects/A0.mp3","./sound-effects/Bb0.mp3","./sound-effects/B0.mp3","./sound-effects/C1.mp3","./sound-effects/Db1.mp3","./sound-effects/D1.mp3","./sound-effects/Eb1.mp3","./sound-effects/E1.mp3"]
 
 const Square = {
     new: function (incrementedSpeed){ //possibly add dynamic positions
@@ -204,7 +206,7 @@ const update = (...rest) => {
         // X Axis Bounce
         if(item.x <= WALL_THICKNESS || item.x >= WIDTH - WALL_THICKNESS) {
             item.moveX = item.moveX === DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT
-            item.sound.play()
+            new Audio(item.sound).play()
         }
         
         // Change Y location
@@ -219,7 +221,7 @@ const update = (...rest) => {
         // Y Axis Bounce
         if(item.y <= WALL_THICKNESS || item.y >= HEIGHT - WALL_THICKNESS) {
             item.moveY = item.moveY === DIRECTION.UP ? DIRECTION.DOWN : DIRECTION.UP
-            item.sound.play()
+            new Audio(item.sound).play()
         }
     })
 }
