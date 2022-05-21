@@ -1,9 +1,10 @@
 const WIDTH = 800-16
 const HEIGHT = 600-59
-const SPEED = 3
+const SPEED = +window.localStorage.getItem("speedCount") || 3
 const COLOR = '#ffffff'
 const WALL_THICKNESS = 1;
-const AMOUNT = 2 
+const AMOUNT = +window.localStorage.getItem("ballCount") || 2
+const ITEM = window.localStorage.getItem("shapeType") || "square" 
 
 const DIRECTION = {
     IDLE: 0,
@@ -13,6 +14,9 @@ const DIRECTION = {
     RIGHT: 4
     //add more?
 }
+
+let Item;
+
 
 // Editable Global Variables
 const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']

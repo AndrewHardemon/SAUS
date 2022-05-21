@@ -12,18 +12,20 @@
     <title>Saus Simulator</title>
   </head>
   <body>
-    <!-- <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
-    <span id="item1"></span> -->
-    <!-- <div class="x">
-        <span class="dot y"></span>
-    </div> -->
-    <!-- <div class="x">
-        <div class="y dot"></div>
-    </div> -->
-    <canvas></canvas>
-    <script src="./renderer.js"></script>
+      <main class="container">
+        <h1>Options</h1>
+        <div class="flex-row">
+            <label for="ball-count">How many balls do you want? (1-20)</label>
+            <input id="ball-count">
+        </div>
+        <div class=flex-row>
+            <label for="speed-count">How fast do you want the balls to go (3 is default [1-10])</label>
+            <input id="speed-count">
+        </div>
+        <div class="btn-container">
+            <button id="runBtn">Run</button>
+        </div>
+      </main>
+    <script src="./options.js"></script>
   </body>
 </html>
