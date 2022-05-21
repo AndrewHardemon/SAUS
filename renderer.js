@@ -1,5 +1,5 @@
-const WIDTH = 800-16
-const HEIGHT = 600-59
+let WIDTH = window.innerWidth || 800-16
+let HEIGHT = window.innerHeight || 600-59
 const SPEED = parseInt(window.localStorage.getItem("speedCount")) || 3
 const COLOR = '#ffffff'
 const WALL_THICKNESS = 1;
@@ -16,10 +16,10 @@ const DIRECTION = {
 }
 
 // Editable Global Variables
-const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
-// const sounds = [new Audio("./sound-effects/a3.mp3"),new Audio("./sound-effects/aS3.mp3"),new Audio("./sound-effects/b3.mp3"),new Audio("./sound-effects/c3.mp3"),new Audio("./sound-effects/cS3.mp3"),new Audio("./sound-effects/d3.mp3"),new Audio("./sound-effects/dS3.mp3"),new Audio("./sound-effects/e3.mp3"),new Audio("./sound-effects/f3.mp3"),new Audio("./sound-effects/fS3.mp3"),new Audio("./sound-effects/g3.mp3"),new Audio("./sound-effects/gS3.mp3"),new Audio("./sound-effects/a4.mp3")]
+const colors = JSON.parse(window.localStorage.getItem("colorList")) || ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 // const sounds = [new Audio("./sound-effects/A0.mp3"),new Audio("./sound-effects/Bb0.mp3"),new Audio("./sound-effects/B0.mp3"),new Audio("./sound-effects/C1.mp3"),new Audio("./sound-effects/Db1.mp3"),new Audio("./sound-effects/D1.mp3"),new Audio("./sound-effects/Eb1.mp3"),new Audio("./sound-effects/E1.mp3")]
-const sounds = ["./sound-effects/A0.mp3","./sound-effects/Bb0.mp3","./sound-effects/B0.mp3","./sound-effects/C1.mp3","./sound-effects/Db1.mp3","./sound-effects/D1.mp3","./sound-effects/Eb1.mp3","./sound-effects/E1.mp3"]
+const sounds = ["./sound-effects/a3.mp3","./sound-effects/aS3.mp3","./sound-effects/b3.mp3","./sound-effects/c3.mp3","./sound-effects/cS3.mp3","./sound-effects/d3.mp3","./sound-effects/dS3.mp3","./sound-effects/e3.mp3","./sound-effects/f3.mp3","./sound-effects/fS3.mp3","./sound-effects/g3.mp3","./sound-effects/gS3.mp3"]
+// const sounds = ["./sound-effects/A0.mp3","./sound-effects/Bb0.mp3","./sound-effects/B0.mp3","./sound-effects/C1.mp3","./sound-effects/Db1.mp3","./sound-effects/D1.mp3","./sound-effects/Eb1.mp3","./sound-effects/E1.mp3"]
 
 const Square = {
     new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
@@ -224,7 +224,9 @@ const update = (...rest) => {
         // X Axis Bounce
         if(item.x <= WALL_THICKNESS || item.x >= WIDTH - WALL_THICKNESS) {
             item.moveX = item.moveX === DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT
-            new Audio(item.sound).play()
+            const audio = new Audio(item.sound)
+            audio.volume = 0.2
+            audio.play()
         }
         
         // Change Y location
@@ -239,7 +241,9 @@ const update = (...rest) => {
         // Y Axis Bounce
         if(item.y <= WALL_THICKNESS || item.y >= HEIGHT - WALL_THICKNESS) {
             item.moveY = item.moveY === DIRECTION.UP ? DIRECTION.DOWN : DIRECTION.UP
-            new Audio(item.sound).play()
+            const audio = new Audio(item.sound)
+            audio.volume = 0.2
+            audio.play()
         }
     })
 }
@@ -247,15 +251,31 @@ const update = (...rest) => {
 
 runProgram()
 
-document.addEventListener("keydown", function(key){
+document.addEventListener("keydown", function({key}){
+    if(key === "q"){
+        window.location.href = "./options.html"
+        return;
+    } else if (key === "r") {
+        window.location.href = "./index.html"
+        return;
+    }
     pause = !pause
     if(!pause){
         runProgram()
     }
 })
 
+// window.addEventListener("resize", function(){
+//     WIDTH = window.innerWidth
+//     HEIGHT = window.innerHeight
+//     canvas.width = WIDTH;
+//     canvas.height = HEIGHT;
+
+// })
+
 // const Program = {
 //     initialize: function(){
 //         this.
 //     }
 // }
+
