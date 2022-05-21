@@ -1,9 +1,13 @@
-const WIDTH = 800-16
-const HEIGHT = 600-59
-const SPEED = 3
-const COLOR = '#ffffff'
+let WIDTH = window.innerWidth || 800-16;
+let HEIGHT = window.innerHeight || 600-59;
+const SPEED = parseInt(window.localStorage.getItem("speedCount")) || 3;
+const COLOR = '#ffffff';
 const WALL_THICKNESS = 1;
-const AMOUNT = 2 
+const AMOUNT = parseInt(window.localStorage.getItem("ballCount")) || 5;
+const SIZE = parseInt(window.localStorage.getItem("sizeChoice")) || 10;
+const ITEM = window.localStorage.getItem("shapeType") || "ball";
+const SCALE = window.localStorage.getItem("scaleChoice") || "none";
+const UNIQUE = window.localStorage.getItem("uniqueChoice");
 
 const DIRECTION = {
     IDLE: 0,
@@ -15,22 +19,50 @@ const DIRECTION = {
 }
 
 // Editable Global Variables
-const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
-// const sounds = [new Audio("./sound-effects/a3.mp3"),new Audio("./sound-effects/aS3.mp3"),new Audio("./sound-effects/b3.mp3"),new Audio("./sound-effects/c3.mp3"),new Audio("./sound-effects/cS3.mp3"),new Audio("./sound-effects/d3.mp3"),new Audio("./sound-effects/dS3.mp3"),new Audio("./sound-effects/e3.mp3"),new Audio("./sound-effects/f3.mp3"),new Audio("./sound-effects/fS3.mp3"),new Audio("./sound-effects/g3.mp3"),new Audio("./sound-effects/gS3.mp3"),new Audio("./sound-effects/a4.mp3")]
+const colors = JSON.parse(window.localStorage.getItem("colorList")) || ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 // const sounds = [new Audio("./sound-effects/A0.mp3"),new Audio("./sound-effects/Bb0.mp3"),new Audio("./sound-effects/B0.mp3"),new Audio("./sound-effects/C1.mp3"),new Audio("./sound-effects/Db1.mp3"),new Audio("./sound-effects/D1.mp3"),new Audio("./sound-effects/Eb1.mp3"),new Audio("./sound-effects/E1.mp3")]
-const sounds = ["./sound-effects/A0.mp3","./sound-effects/Bb0.mp3","./sound-effects/B0.mp3","./sound-effects/C1.mp3","./sound-effects/Db1.mp3","./sound-effects/D1.mp3","./sound-effects/Eb1.mp3","./sound-effects/E1.mp3"]
+const scaleObj = {"a": 0, "a#": 1, "b": 2, "c": 3, "c#": 4, "d": 5, "d#": 6, "e": 7, "f": 8, "f#": 9, "g": 10, "g#": 11}
+let soundList = ["./sound-effects/a3.mp3","./sound-effects/aS3.mp3","./sound-effects/b3.mp3","./sound-effects/c3.mp3","./sound-effects/cS3.mp3","./sound-effects/d3.mp3","./sound-effects/dS3.mp3","./sound-effects/e3.mp3","./sound-effects/f3.mp3","./sound-effects/fS3.mp3","./sound-effects/g3.mp3","./sound-effects/gS3.mp3"]
+
+let sounds = []
+
+const minor = [2, 1, 2, 2, 1, 2, 2]
+const major = [2, 2, 1, 2, 2, 2, 1]
+
+const key = SCALE.split(" ")[0];
+const scale = SCALE.split(" ")[1] === "minor" ? minor : major
+
+if(key !== "none" && scale !== "none"){
+    soundList = soundList.slice(scaleObj[key]).concat(soundList.slice(0,scaleObj[key]))
+    
+    let index = 0;
+    for(let i = 0; i < scale.length; i++){
+        sounds.push(soundList[index])
+        index += scale[i]
+    }
+} else {
+    sounds = soundList
+}
+
+console.log(sounds)
+
+// A Major = A B C# D E F# G#
+// A Minor = A B C D E F G
 
 const Square = {
-    new: function (incrementedSpeed){ //possibly add dynamic positions
-        let width = 10;
-        let height = 10; 
+    new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
+        let width = SIZE;
+        let height = SIZE; 
         return {
+            // radius: (width+height)/4,
             width,
             height,
             x: (WIDTH/2) - (width/2),
             y: (HEIGHT/2) - (height/2),
             moveX: DIRECTION.IDLE,
             moveY: DIRECTION.IDLE,
+            color,
+            sound,
             speed: incrementedSpeed || SPEED
         }
     }
@@ -38,7 +70,7 @@ const Square = {
 
 const Ball = {
     new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
-        let radius = 10;
+        let radius = SIZE;
         return {
             radius,
             x: (WIDTH/2) - radius,
@@ -93,6 +125,20 @@ const Wall = {
     }
 }
 
+//Choosing shape
+let Item;
+switch(ITEM){
+    case "ball":
+        Item = Ball;
+        break;
+    case "square":
+        Item = Square;
+        break;
+    default:
+        throw new Error("Invalid property");
+}
+
+
 const canvas = document.querySelector("canvas")
 const context = canvas.getContext("2d")
 
@@ -140,22 +186,51 @@ const walls = [wall_up, wall_down, wall_left, wall_right]
 //     ball.y = Math.ceil(Math.random() * HEIGHT)
 // })
 
-const balls = []
+function randomize(arr, remainArr){
+    const item = remainArr[Math.floor(Math.random() * remainArr.length)]
+    const index = remainArr.indexOf(item)
+    let startArr = remainArr.slice(0, index)
+    let endArr = remainArr.slice(index+1)
+    let newArr = startArr.concat(endArr)
+
+    console.log(index, startArr, endArr, newArr)
+    return {item, newArr}
+}
+
+const items = [];
+let remainSounds = [...sounds];
+let remainColors = [...colors];
 for(let i = 0; i < AMOUNT; i++){
-    //Create ball with random values
-    const ball = Ball.new()
-    ball.moveX = Math.ceil(Math.random() * 2) + 2
-    ball.moveY = Math.ceil(Math.random() * 2)
+    //Create item with random values
+    const item = Item.new()
+    item.moveX = Math.ceil(Math.random() * 2) + 2
+    item.moveY = Math.ceil(Math.random() * 2)
     
-    ball.sound = sounds[Math.floor(Math.random() * sounds.length)]
-    ball.color = colors[Math.floor(Math.random() * colors.length)]
-    
-    const buffer = WALL_THICKNESS + ball.radius
+    if(UNIQUE){
+        const {item: sound, newArr: newSounds} = randomize(sounds, remainSounds)
+        if(newSounds.length <= 1){
+            remainSounds = [...sounds]
+        } else {
+            remainSounds = [...newSounds]
+        }
+        item.sound = sound
+        const {item: color, newArr: newColors} = randomize(colors, remainColors)
+        if(newColors.length <= 1){
+            remainColors = [...colors]           
+        } else {
+            remainColors = [...newColors]
+        }
+        item.color = color
+    } else {
+        item.sound = sounds[Math.floor(Math.random() * sounds.length)]
+        item.color = colors[Math.floor(Math.random() * colors.length)]
+    }
+    const buffer = WALL_THICKNESS + item.radius
 
-    ball.x = Math.floor(Math.random() * WIDTH - buffer) + buffer
-    ball.y = Math.floor(Math.random() * HEIGHT - buffer) + buffer
+    item.x = Math.floor(Math.random() * WIDTH - buffer) + buffer
+    item.y = Math.floor(Math.random() * HEIGHT - buffer) + buffer
 
-    balls.push(ball)
+    items.push(item)
 }
 
 const draw = () => {
@@ -172,16 +247,16 @@ const draw = () => {
         // context.fillStyle = "red"
     })
 
-    //Create Balls
-    balls.forEach((ball) => {
-        context.fillStyle = ball.color
+    //Create Itemss
+    items.forEach((item) => {
+        context.fillStyle = item.color
         context.beginPath()
-        context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true)
+        context.arc(item.x, item.y, item.radius, 0, Math.PI * 2, true)
         context.stroke();
         context.fill("evenodd")
     })
 
-    update(...balls)
+    update(...items)
     console.log("hello")
     if(!pause){
         setTimeout(()=> {
@@ -206,7 +281,9 @@ const update = (...rest) => {
         // X Axis Bounce
         if(item.x <= WALL_THICKNESS || item.x >= WIDTH - WALL_THICKNESS) {
             item.moveX = item.moveX === DIRECTION.RIGHT ? DIRECTION.LEFT : DIRECTION.RIGHT
-            new Audio(item.sound).play()
+            const audio = new Audio(item.sound)
+            audio.volume = 0.2
+            audio.play()
         }
         
         // Change Y location
@@ -221,23 +298,46 @@ const update = (...rest) => {
         // Y Axis Bounce
         if(item.y <= WALL_THICKNESS || item.y >= HEIGHT - WALL_THICKNESS) {
             item.moveY = item.moveY === DIRECTION.UP ? DIRECTION.DOWN : DIRECTION.UP
-            new Audio(item.sound).play()
+            const audio = new Audio(item.sound)
+            audio.volume = 0.2
+            audio.play()
         }
     })
 }
 
+// const uniquify = (arr) => {
+//     const obj = arr.reduce((acc, cur) => ({...acc, cur: }))
+
+// }
+
 
 runProgram()
 
-document.addEventListener("keydown", function(key){
+document.addEventListener("keydown", function({key}){
+    if(key === "q"){
+        window.location.href = "./options.html"
+        return;
+    } else if (key === "r") {
+        window.location.href = "./index.html"
+        return;
+    }
     pause = !pause
     if(!pause){
         runProgram()
     }
 })
 
+// window.addEventListener("resize", function(){
+//     WIDTH = window.innerWidth
+//     HEIGHT = window.innerHeight
+//     canvas.width = WIDTH;
+//     canvas.height = HEIGHT;
+
+// })
+
 // const Program = {
 //     initialize: function(){
 //         this.
 //     }
 // }
+

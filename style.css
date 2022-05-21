@@ -46,6 +46,7 @@ body {
     width: 100%;
 } */
 
+
 :root{
     --size: 100px;
     --width: 25px;
@@ -90,4 +91,74 @@ body {
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+.container {
+  margin: 5%;
+  border: 2px solid black;
+  padding: 2%;
+  height: 80vh;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.btn-container {
+  display: flex; 
+  justify-content: space-around;
+}
+
+#runBtn {
+    background-color: hsl(234, 82%, 49%);
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    padding: 10px 16px;
+    /* margin-top: 3%;
+    margin-bottom: 0%; */
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: color 100ms;
+    vertical-align: baseline;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+
+  }
+#runBtn:hover,
+#runBtn:focus {
+  background-color: #2e3ed1;
+}
+
+.info-container { 
+  /* margin-top: 5%; */
+}
+
+input {
+  width: 30%
+}
+
+
+.canvas-container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

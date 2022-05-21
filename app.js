@@ -6,12 +6,13 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
+        icon: __dirname + "/benzine.ico",
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
     })
 
-    win.loadFile("index.html")
+    win.loadFile("options.html")
 }
 
 app.whenReady().then(()=>{
