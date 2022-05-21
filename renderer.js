@@ -5,6 +5,7 @@ const COLOR = '#ffffff'
 const WALL_THICKNESS = 1;
 const AMOUNT = parseInt(window.localStorage.getItem("ballCount")) || 2
 const ITEM = window.localStorage.getItem("shapeType") || "ball" 
+const SCALE = window.localStorage.getItem("scaleChoice") || "none"
 
 const DIRECTION = {
     IDLE: 0,
@@ -18,8 +19,29 @@ const DIRECTION = {
 // Editable Global Variables
 const colors = JSON.parse(window.localStorage.getItem("colorList")) || ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 // const sounds = [new Audio("./sound-effects/A0.mp3"),new Audio("./sound-effects/Bb0.mp3"),new Audio("./sound-effects/B0.mp3"),new Audio("./sound-effects/C1.mp3"),new Audio("./sound-effects/Db1.mp3"),new Audio("./sound-effects/D1.mp3"),new Audio("./sound-effects/Eb1.mp3"),new Audio("./sound-effects/E1.mp3")]
-const sounds = ["./sound-effects/a3.mp3","./sound-effects/aS3.mp3","./sound-effects/b3.mp3","./sound-effects/c3.mp3","./sound-effects/cS3.mp3","./sound-effects/d3.mp3","./sound-effects/dS3.mp3","./sound-effects/e3.mp3","./sound-effects/f3.mp3","./sound-effects/fS3.mp3","./sound-effects/g3.mp3","./sound-effects/gS3.mp3"]
-// const sounds = ["./sound-effects/A0.mp3","./sound-effects/Bb0.mp3","./sound-effects/B0.mp3","./sound-effects/C1.mp3","./sound-effects/Db1.mp3","./sound-effects/D1.mp3","./sound-effects/Eb1.mp3","./sound-effects/E1.mp3"]
+const scaleObj = {"a": 0, "a#": 1, "b": 2, "c": 3, "c#": 4, "d": 5, "d#": 6, "e": 7, "f": 8, "f#": 9, "g": 10, "g#": 11}
+let soundList = ["./sound-effects/a3.mp3","./sound-effects/aS3.mp3","./sound-effects/b3.mp3","./sound-effects/c3.mp3","./sound-effects/cS3.mp3","./sound-effects/d3.mp3","./sound-effects/dS3.mp3","./sound-effects/e3.mp3","./sound-effects/f3.mp3","./sound-effects/fS3.mp3","./sound-effects/g3.mp3","./sound-effects/gS3.mp3"]
+
+const sounds = []
+
+const minor = [2, 1, 2, 2, 1, 2, 2]
+const major = [2, 2, 1, 2, 2, 2, 1]
+
+const key = SCALE.split(" ")[0];
+const scale = SCALE.split(" ")[1] === "minor" ? minor : major
+
+soundList = soundList.slice(scaleObj[key]).concat(soundList.slice(0,scaleObj[key]))
+
+let index = 0;
+for(let i = 0; i < scale.length; i++){
+    sounds.push(soundList[index])
+    index += scale[i]
+}
+
+console.log(sounds)
+
+// A Major = A B C# D E F# G#
+// A Minor = A B C D E F G
 
 const Square = {
     new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
