@@ -6,6 +6,7 @@ const WALL_THICKNESS = 1;
 const AMOUNT = parseInt(window.localStorage.getItem("ballCount")) || 2
 const ITEM = window.localStorage.getItem("shapeType") || "ball" 
 const SCALE = window.localStorage.getItem("scaleChoice") || "none"
+const UNIQUE = window.localStorage.getItem("uniqueChoice");
 
 const DIRECTION = {
     IDLE: 0,
@@ -22,7 +23,7 @@ const colors = JSON.parse(window.localStorage.getItem("colorList")) || ['#1abc9c
 const scaleObj = {"a": 0, "a#": 1, "b": 2, "c": 3, "c#": 4, "d": 5, "d#": 6, "e": 7, "f": 8, "f#": 9, "g": 10, "g#": 11}
 let soundList = ["./sound-effects/a3.mp3","./sound-effects/aS3.mp3","./sound-effects/b3.mp3","./sound-effects/c3.mp3","./sound-effects/cS3.mp3","./sound-effects/d3.mp3","./sound-effects/dS3.mp3","./sound-effects/e3.mp3","./sound-effects/f3.mp3","./sound-effects/fS3.mp3","./sound-effects/g3.mp3","./sound-effects/gS3.mp3"]
 
-const sounds = []
+let sounds = []
 
 const minor = [2, 1, 2, 2, 1, 2, 2]
 const major = [2, 2, 1, 2, 2, 2, 1]
@@ -30,12 +31,16 @@ const major = [2, 2, 1, 2, 2, 2, 1]
 const key = SCALE.split(" ")[0];
 const scale = SCALE.split(" ")[1] === "minor" ? minor : major
 
-soundList = soundList.slice(scaleObj[key]).concat(soundList.slice(0,scaleObj[key]))
-
-let index = 0;
-for(let i = 0; i < scale.length; i++){
-    sounds.push(soundList[index])
-    index += scale[i]
+if(key !== "none" && scale !== "none"){
+    soundList = soundList.slice(scaleObj[key]).concat(soundList.slice(0,scaleObj[key]))
+    
+    let index = 0;
+    for(let i = 0; i < scale.length; i++){
+        sounds.push(soundList[index])
+        index += scale[i]
+    }
+} else {
+    sounds = soundList
 }
 
 console.log(sounds)
@@ -180,16 +185,45 @@ const walls = [wall_up, wall_down, wall_left, wall_right]
 //     ball.y = Math.ceil(Math.random() * HEIGHT)
 // })
 
-const items = []
+function randomize(arr, remainArr){
+    const item = remainArr[Math.floor(Math.random() * remainArr.length)]
+    const index = remainArr.indexOf(item)
+    let startArr = remainArr.slice(0, index)
+    let endArr = remainArr.slice(index+1)
+    let newArr = startArr.concat(endArr)
+
+    console.log(index, startArr, endArr, newArr)
+    return {item, newArr}
+}
+
+const items = [];
+let remainSounds = [...sounds];
+let remainColors = [...colors];
 for(let i = 0; i < AMOUNT; i++){
     //Create item with random values
     const item = Item.new()
     item.moveX = Math.ceil(Math.random() * 2) + 2
     item.moveY = Math.ceil(Math.random() * 2)
     
-    item.sound = sounds[Math.floor(Math.random() * sounds.length)]
-    item.color = colors[Math.floor(Math.random() * colors.length)]
-    
+    if(UNIQUE){
+        const {item: sound, newArr: newSounds} = randomize(sounds, remainSounds)
+        if(newSounds.length <= 1){
+            remainSounds = [...sounds]
+        } else {
+            remainSounds = [...newSounds]
+        }
+        item.sound = sound
+        const {item: color, newArr: newColors} = randomize(colors, remainColors)
+        if(newColors.length <= 1){
+            remainColors = [...colors]           
+        } else {
+            remainColors = [...newColors]
+        }
+        item.color = color
+    } else {
+        item.sound = sounds[Math.floor(Math.random() * sounds.length)]
+        item.color = colors[Math.floor(Math.random() * colors.length)]
+    }
     const buffer = WALL_THICKNESS + item.radius
 
     item.x = Math.floor(Math.random() * WIDTH - buffer) + buffer
@@ -269,6 +303,11 @@ const update = (...rest) => {
         }
     })
 }
+
+// const uniquify = (arr) => {
+//     const obj = arr.reduce((acc, cur) => ({...acc, cur: }))
+
+// }
 
 
 runProgram()

@@ -25,22 +25,34 @@
           <input id="color-list">
         </div>
         <div class="flex-row">
+          <label for="key-choice">What key do you want for the notes</label>
+          <select id="key-choice">
+            <option value="none">None</option>
+            <option value="a">A</option>
+            <option value="a#">A#</option>
+            <option value="b">B</option>
+            <option value="c">C</option>
+            <option value="c#">C#</option>
+            <option value="d">D</option>
+            <option value="d#">D#</option>
+            <option value="e">E</option>
+            <option value="f">F</option>
+            <option value="f#">F#</option>
+            <option value="g">G</option>
+            <option value="g#">G#</option>
+          </select>
+        </div>
+        <div class="flex-row">
           <label for="scale-choice">What scale do you want for the notes</label>
           <select id="scale-choice">
             <option value="none">None</option>
-            <option value="a major">A Major</option>
-            <option value="a minor">A Minor</option>
-            <option value="a# major">A# Major</option>
-            <option value="a# minor">A# Minor</option>
-            <option value="b major">B Major</option>
-            <option value="b minor">B Minor</option>
-            <option value="c major">C Major</option>
-            <option value="c minor">C Minor</option>
-            <option value="c# major">C# Major</option>
-            <option value="c# minor">C# Minor</option>
-            <option value="d major">D Major</option>
-            <option value="b minor">D Minor</option>
+            <option value="major">Major</option>
+            <option value="minor">Minor</option>
           </select>
+        </div>
+        <div class="flex-row">
+          <label for="unique-choice">Make each item as unique as possible</label>
+          <input type="checkbox" checked id="unique-choice">
         </div>
         <div class="btn-container">
             <button id="runBtn">Run</button>

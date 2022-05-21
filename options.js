@@ -5,19 +5,22 @@ colorListEl.value = colorListArr.toString()
 
 function runCode(){
     // Get Values
-    const ballCount = parseInt(document.querySelector("#ball-count").value)
-    const speedCount = parseInt(document.querySelector("#speed-count").value)
+    let ballCount = parseInt(document.querySelector("#ball-count").value)
+    let speedCount = parseInt(document.querySelector("#speed-count").value)
 
+    const keyChoiceEl = document.querySelector("#key-choice")
+    const keyChoice = keyChoiceEl.options[keyChoiceEl.selectedIndex].value
     const scaleChoiceEl = document.querySelector("#scale-choice")
     const scaleChoice = scaleChoiceEl.options[scaleChoiceEl.selectedIndex].value
-    console.log(scaleChoice)
+
+    const uniqueChoice = document.querySelector("#unique-choice").checked
 
     // Validation
-    if(isNaN(ballCount)) return alert("Invalid character. Please insert a number")
-    if(ballCount <= 0 || ballCount > 20) return alert("Please insert a number between 1 and 20")
+    if(isNaN(ballCount)) ballCount = 3 
+    if(ballCount <= 0 || ballCount > 20) ballCount = 3
 
-    if(isNaN(speedCount)) return alert("Invalid character. Please insert a number")
-    if(speedCount <= 0 || speedCount > 10) return alert("Please insert a number between 1 and 10")
+    if(isNaN(speedCount)) speedCount = 3
+    if(speedCount <= 0 || speedCount > 10) speedCount = 3
 
     // Color List
     const colors = colorListEl.value.split(",")
@@ -28,7 +31,8 @@ function runCode(){
     window.localStorage.setItem("ballCount", ballCount);
     window.localStorage.setItem("speedCount", speedCount);
     window.localStorage.setItem("colorList", colors.length >= 1 ? JSON.stringify(colors) : "");
-    window.localStorage.setItem("scaleChoice", scaleChoice)
+    window.localStorage.setItem("scaleChoice", `${keyChoice} ${scaleChoice}`);
+    window.localStorage.setItem("uniqueChoice", uniqueChoice);
 
     // Change Page
     window.location.href = "./index.html"
