@@ -1,6 +1,6 @@
 // Display color list to input
 const colorListEl = document.querySelector("#color-list")
-const colorListArr = JSON.parse(window.localStorage.getItem("colorList")) || []
+const colorListArr = JSON.parse(window.localStorage.getItem("colorList")) || ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000", "#0000FF", "#00008B", "#800080"]
 colorListEl.value = colorListArr.toString()
 
 function runCode(){
@@ -26,11 +26,13 @@ function runCode(){
     const colors = colorListEl.value.split(",")
         .map(color => color.trim())
         .filter(color => color[0] === "#" && color.length === 7)
-
+    console.log(colors)
     // Save to localstorage
     window.localStorage.setItem("ballCount", ballCount);
     window.localStorage.setItem("speedCount", speedCount);
-    window.localStorage.setItem("colorList", colors.length >= 1 ? JSON.stringify(colors) : "");
+    if(colors.length >= 1){
+        window.localStorage.setItem("colorList", JSON.stringify(colors));
+    }
     window.localStorage.setItem("scaleChoice", `${keyChoice} ${scaleChoice}`);
     window.localStorage.setItem("uniqueChoice", uniqueChoice);
 

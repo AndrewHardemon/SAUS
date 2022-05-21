@@ -1,13 +1,28 @@
 {
-  "name": "4saus",
+  "name": "s.a.u.s",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "package": "electron-packager . --asar",
-    "packager": "electron-packager . saus --platform=win32 --arch=x64"
+    "packager": "electron-packager . S.A.U.S --platform=win32 --arch=x64",
+    "build-installer": "electron-builder"
+  },
+  "build": {
+    "appId":"S.A.U.S",
+    "win": {
+      "target": ["nsis"],
+      "icon": "./benzine.ico",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "installerIcon": "./benzine.ico",
+      "uninstallerIcon": "./benzine.ico",
+      "uninstallDisplayName": "S.A.U.S",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "keywords": [],
   "author": "",
@@ -15,6 +30,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
     "electron": "^18.0.4",
+    "electron-builder": "^23.0.3",
     "electron-packager": "^15.5.1"
   },
   "dependencies": {
