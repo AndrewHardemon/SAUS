@@ -1,11 +1,12 @@
-let WIDTH = window.innerWidth || 800-16
-let HEIGHT = window.innerHeight || 600-59
-const SPEED = parseInt(window.localStorage.getItem("speedCount")) || 3
-const COLOR = '#ffffff'
+let WIDTH = window.innerWidth || 800-16;
+let HEIGHT = window.innerHeight || 600-59;
+const SPEED = parseInt(window.localStorage.getItem("speedCount")) || 3;
+const COLOR = '#ffffff';
 const WALL_THICKNESS = 1;
-const AMOUNT = parseInt(window.localStorage.getItem("ballCount")) || 2
-const ITEM = window.localStorage.getItem("shapeType") || "ball" 
-const SCALE = window.localStorage.getItem("scaleChoice") || "none"
+const AMOUNT = parseInt(window.localStorage.getItem("ballCount")) || 5;
+const SIZE = parseInt(window.localStorage.getItem("sizeChoice")) || 10;
+const ITEM = window.localStorage.getItem("shapeType") || "ball";
+const SCALE = window.localStorage.getItem("scaleChoice") || "none";
 const UNIQUE = window.localStorage.getItem("uniqueChoice");
 
 const DIRECTION = {
@@ -50,8 +51,8 @@ console.log(sounds)
 
 const Square = {
     new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
-        let width = 10;
-        let height = 10; 
+        let width = SIZE;
+        let height = SIZE; 
         return {
             // radius: (width+height)/4,
             width,
@@ -69,7 +70,7 @@ const Square = {
 
 const Ball = {
     new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
-        let radius = 10;
+        let radius = SIZE;
         return {
             radius,
             x: (WIDTH/2) - radius,

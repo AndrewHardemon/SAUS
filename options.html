@@ -13,16 +13,20 @@
       <main class="container">
         <h1>Options</h1>
         <div class="flex-row">
-            <label for="ball-count">How many balls do you want? (1-20)</label>
+            <label for="ball-count">How many balls do you want? (1-500)</label>
             <input id="ball-count" value="7">
         </div>
         <div class="flex-row">
-            <label for="speed-count">How fast do you want the balls to go (3 is default [1-10])</label>
+            <label for="speed-count">How fast do you want the balls to go (3 is default [1-100])</label>
             <input id="speed-count" value="3">
         </div>
         <div class="flex-row resizable-input">
-          <label for="color-list">What colors would you like to use? (use hexcodes with # seperated by ,)</label>
+          <label for="color-list">What colors would you like? (use hexcodes with # seperated by ,)</label>
           <input id="color-list">
+        </div>
+        <div class="flex-row">
+          <label for="size-choice">What should the size of the item be (1-1000)</label>
+          <input id="size-choice" value="10">
         </div>
         <div class="flex-row">
           <label for="key-choice">What key do you want for the notes</label>
@@ -62,6 +66,7 @@
           <h3>Info</h3>
           <h4>While running the program press Q to go back, R to restart, and any other key to pause</h4>
           <h4>Resize this window to change size of program window</h4>
+          <h4>Do NOT put all settings at max. It causes a very loud sound. The max setting is work in progress</h4>
         </div>
       </main>
     <script src="./options.js"></script>

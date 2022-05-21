@@ -7,6 +7,7 @@ function runCode(){
     // Get Values
     let ballCount = parseInt(document.querySelector("#ball-count").value)
     let speedCount = parseInt(document.querySelector("#speed-count").value)
+    let sizeChoice = parseInt(document.querySelector("#size-choice").value)
 
     const keyChoiceEl = document.querySelector("#key-choice")
     const keyChoice = keyChoiceEl.options[keyChoiceEl.selectedIndex].value
@@ -16,11 +17,14 @@ function runCode(){
     const uniqueChoice = document.querySelector("#unique-choice").checked
 
     // Validation
-    if(isNaN(ballCount)) ballCount = 3 
-    if(ballCount <= 0 || ballCount > 20) ballCount = 3
+    if(isNaN(ballCount)) ballCount = 7
+    if(ballCount <= 0 || ballCount > 500) ballCount = 7
 
     if(isNaN(speedCount)) speedCount = 3
-    if(speedCount <= 0 || speedCount > 10) speedCount = 3
+    if(speedCount <= 0 || speedCount > 100) speedCount = 3
+
+    if(isNaN(sizeChoice)) sizeChoice = 10
+    if(sizeChoice <= 0 || sizeChoice > 1000) sizeChoice = 10
 
     // Color List
     const colors = colorListEl.value.split(",")
@@ -30,9 +34,12 @@ function runCode(){
     // Save to localstorage
     window.localStorage.setItem("ballCount", ballCount);
     window.localStorage.setItem("speedCount", speedCount);
+    window.localStorage.setItem("sizeChoice", sizeChoice);
+
     if(colors.length >= 1){
         window.localStorage.setItem("colorList", JSON.stringify(colors));
     }
+
     window.localStorage.setItem("scaleChoice", `${keyChoice} ${scaleChoice}`);
     window.localStorage.setItem("uniqueChoice", uniqueChoice);
 
