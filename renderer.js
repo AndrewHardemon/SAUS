@@ -1,10 +1,10 @@
 const WIDTH = 800-16
 const HEIGHT = 600-59
-const SPEED = +window.localStorage.getItem("speedCount") || 3
+const SPEED = parseInt(window.localStorage.getItem("speedCount")) || 3
 const COLOR = '#ffffff'
 const WALL_THICKNESS = 1;
-const AMOUNT = +window.localStorage.getItem("ballCount") || 2
-const ITEM = window.localStorage.getItem("shapeType") || "square" 
+const AMOUNT = parseInt(window.localStorage.getItem("ballCount")) || 2
+const ITEM = window.localStorage.getItem("shapeType") || "ball" 
 
 const DIRECTION = {
     IDLE: 0,
@@ -15,9 +15,6 @@ const DIRECTION = {
     //add more?
 }
 
-let Item;
-
-
 // Editable Global Variables
 const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 // const sounds = [new Audio("./sound-effects/a3.mp3"),new Audio("./sound-effects/aS3.mp3"),new Audio("./sound-effects/b3.mp3"),new Audio("./sound-effects/c3.mp3"),new Audio("./sound-effects/cS3.mp3"),new Audio("./sound-effects/d3.mp3"),new Audio("./sound-effects/dS3.mp3"),new Audio("./sound-effects/e3.mp3"),new Audio("./sound-effects/f3.mp3"),new Audio("./sound-effects/fS3.mp3"),new Audio("./sound-effects/g3.mp3"),new Audio("./sound-effects/gS3.mp3"),new Audio("./sound-effects/a4.mp3")]
@@ -25,16 +22,19 @@ const colors = ['#1abc9c', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6']
 const sounds = ["./sound-effects/A0.mp3","./sound-effects/Bb0.mp3","./sound-effects/B0.mp3","./sound-effects/C1.mp3","./sound-effects/Db1.mp3","./sound-effects/D1.mp3","./sound-effects/Eb1.mp3","./sound-effects/E1.mp3"]
 
 const Square = {
-    new: function (incrementedSpeed){ //possibly add dynamic positions
+    new: function (color, sound, incrementedSpeed){ //possibly add dynamic positions
         let width = 10;
         let height = 10; 
         return {
+            // radius: (width+height)/4,
             width,
             height,
             x: (WIDTH/2) - (width/2),
             y: (HEIGHT/2) - (height/2),
             moveX: DIRECTION.IDLE,
             moveY: DIRECTION.IDLE,
+            color,
+            sound,
             speed: incrementedSpeed || SPEED
         }
     }
@@ -97,6 +97,20 @@ const Wall = {
     }
 }
 
+//Choosing shape
+let Item;
+switch(ITEM){
+    case "ball":
+        Item = Ball;
+        break;
+    case "square":
+        Item = Square;
+        break;
+    default:
+        throw new Error("Invalid property");
+}
+
+
 const canvas = document.querySelector("canvas")
 const context = canvas.getContext("2d")
 
@@ -144,22 +158,22 @@ const walls = [wall_up, wall_down, wall_left, wall_right]
 //     ball.y = Math.ceil(Math.random() * HEIGHT)
 // })
 
-const balls = []
+const items = []
 for(let i = 0; i < AMOUNT; i++){
-    //Create ball with random values
-    const ball = Ball.new()
-    ball.moveX = Math.ceil(Math.random() * 2) + 2
-    ball.moveY = Math.ceil(Math.random() * 2)
+    //Create item with random values
+    const item = Item.new()
+    item.moveX = Math.ceil(Math.random() * 2) + 2
+    item.moveY = Math.ceil(Math.random() * 2)
     
-    ball.sound = sounds[Math.floor(Math.random() * sounds.length)]
-    ball.color = colors[Math.floor(Math.random() * colors.length)]
+    item.sound = sounds[Math.floor(Math.random() * sounds.length)]
+    item.color = colors[Math.floor(Math.random() * colors.length)]
     
-    const buffer = WALL_THICKNESS + ball.radius
+    const buffer = WALL_THICKNESS + item.radius
 
-    ball.x = Math.floor(Math.random() * WIDTH - buffer) + buffer
-    ball.y = Math.floor(Math.random() * HEIGHT - buffer) + buffer
+    item.x = Math.floor(Math.random() * WIDTH - buffer) + buffer
+    item.y = Math.floor(Math.random() * HEIGHT - buffer) + buffer
 
-    balls.push(ball)
+    items.push(item)
 }
 
 const draw = () => {
@@ -176,16 +190,16 @@ const draw = () => {
         // context.fillStyle = "red"
     })
 
-    //Create Balls
-    balls.forEach((ball) => {
-        context.fillStyle = ball.color
+    //Create Itemss
+    items.forEach((item) => {
+        context.fillStyle = item.color
         context.beginPath()
-        context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true)
+        context.arc(item.x, item.y, item.radius, 0, Math.PI * 2, true)
         context.stroke();
         context.fill("evenodd")
     })
 
-    update(...balls)
+    update(...items)
     console.log("hello")
     if(!pause){
         setTimeout(()=> {

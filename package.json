@@ -5,14 +5,17 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-packager . --asar",
+    "packager": "electron-packager . saus --platform=win32 --arch=x64 --asar"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
-    "electron": "^18.0.4"
+    "electron": "^18.0.4",
+    "electron-packager": "^15.5.1"
   },
   "dependencies": {
     "bootstrap": "^5.2.0-beta1"
