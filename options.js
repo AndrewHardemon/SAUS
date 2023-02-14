@@ -44,7 +44,7 @@ function runCode(){
     window.localStorage.setItem("uniqueChoice", uniqueChoice);
 
     // Change Page
-    window.location.href = "./index.html"
+    window.location.href = "./game.html"
 }
 
 

@@ -315,10 +315,10 @@ runProgram()
 
 document.addEventListener("keydown", function({key}){
     if(key === "q"){
-        window.location.href = "./options.html"
+        window.location.href = "./index.html"
         return;
     } else if (key === "r") {
-        window.location.href = "./index.html"
+        window.location.href = "./game.html"
         return;
     }
     pause = !pause

@@ -12,7 +12,7 @@ const createWindow = () => {
         }
     })
 
-    win.loadFile("options.html")
+    win.loadFile("index.html")
 }
 
 app.whenReady().then(()=>{
